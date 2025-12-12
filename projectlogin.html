@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>RetroHack - Register</title>
+<style>
+  body { font-family: Comic Sans MS, Arial; margin:0; background:#ffe4e1; }
+  header { background:#ff69b4; color:white; padding:15px; display:flex; justify-content:space-between; align-items:center; border-bottom:4px solid #ffb6c1; }
+  header h2 { margin:0; font-size:28px; }
+  nav a { color:white; margin-left:15px; text-decoration:none; font-weight:bold; background:#ffb6c1; padding:5px 10px; border-radius:8px; border:2px solid white; }
+  nav a:hover { background:white; color:#ff69b4; }
+  .container { padding:20px; }
+  h3 { color:#ff69b4; }
+  input { display:block; margin:8px 0; padding:8px; width:250px; border:2px solid #ff69b4; border-radius:6px; background:#fff8dc; }
+  button { background:#ff69b4; color:white; padding:8px 15px; border:none; border-radius:8px; font-size:16px; cursor:pointer; border:2px solid white; }
+  button:hover { background:white; color:#ff69b4; border:2px solid #ff69b4; }
+  #error { color:red; font-size:14px; }
+</style>
+</head>
+<body>
+<header>
+  <h2>RetroHack</h2>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="events.html">Events</a>
+    <a href="leaderboard.html">Leaderboard</a>
+    <a href="projectlogin.html">Register</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h3>Registration</h3>
+  <form onsubmit="return checkForm()">
+    <label>Email:</label>
+    <input type="text" id="email">
+    <label>Password (min 6 chars):</label>
+    <input type="password" id="pass">
+    <p id="error"></p>
+    <button type="submit">Register</button>
+  </form>
+</div>
+
+<script>
+function checkForm() {
+  let email = document.getElementById("email").value.trim();
+  let pass = document.getElementById("pass").value;
+  let error = document.getElementById("error");
+
+  // Valid email: must have something before @, a domain, and end with .com/.in/.edu
+  let pattern = /^[^@\s]+@[^@\s]+\.(com|in|edu)$/i;
+
+  if (!pattern.test(email)) {
+    error.innerHTML = "Email must be valid and end with .com, .in, or .edu";
+    return false;
+  }
+
+  if (pass.length < 6) {
+    error.innerHTML = "Password must be at least 6 characters";
+    return false;
+  }
+
+  alert("Registration Successful!");
+  return true;
+}
+</script>
+</body>
+</html>
