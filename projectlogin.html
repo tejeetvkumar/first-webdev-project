@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>RetroHack - Register</title>
+<title>RetroHack - Sign In</title>
 <style>
   body { font-family: Comic Sans MS, Arial; margin:0; background:#ffe4e1; }
   header { background:#ff69b4; color:white; padding:15px; display:flex; justify-content:space-between; align-items:center; border-bottom:4px solid #ffb6c1; }
@@ -17,6 +17,7 @@
   #error { color:red; font-size:14px; }
 </style>
 </head>
+
 <body>
 <header>
   <h2>RetroHack</h2>
@@ -24,44 +25,99 @@
     <a href="index.html">Home</a>
     <a href="events.html">Events</a>
     <a href="leaderboard.html">Leaderboard</a>
-    <a href="projectlogin.html">Register</a>
+    <a href="projectlogin.html">Sign In</a>
   </nav>
 </header>
 
 <div class="container">
-  <h3>Registration</h3>
-  <form onsubmit="return checkForm()">
+
+  <h3 id="title">Sign In</h3>
+
+  <!-- Sign In Form -->
+  <div id="signinBox">
     <label>Email:</label>
     <input type="text" id="email">
-    <label>Password (min 6 chars):</label>
+
+    <label>Password:</label>
     <input type="password" id="pass">
+
     <p id="error"></p>
-    <button type="submit">Register</button>
-  </form>
+
+    <button onclick="signIn()">Sign In</button>
+    <button onclick="registerUser()">Register (New User)</button>
+  </div>
+
+  <!-- Sign Out Box -->
+  <div id="logoutBox" style="display:none;">
+    <h3>You are logged in!</h3>
+    <p id="userEmail"></p>
+    <button onclick="signOut()">Sign Out</button>
+  </div>
+
 </div>
 
 <script>
-function checkForm() {
+
+// CHECK LOGIN STATUS ON PAGE LOAD
+window.onload = function() {
+  let logged = localStorage.getItem("loggedIn");
+  
+  if (logged === "true") {
+    document.getElementById("signinBox").style.display = "none";
+    document.getElementById("logoutBox").style.display = "block";
+
+    let email = localStorage.getItem("email");
+    document.getElementById("userEmail").innerText = "Logged in as: " + email;
+  }
+};
+
+// REGISTER NEW USER
+function registerUser() {
   let email = document.getElementById("email").value.trim();
   let pass = document.getElementById("pass").value;
-  let error = document.getElementById("error");
 
-  // Valid email: must have something before @, a domain, and end with .com/.in/.edu
-  let pattern = /^[^@\s]+@[^@\s]+\.(com|in|edu)$/i;
-
-  if (!pattern.test(email)) {
-    error.innerHTML = "Email must be valid and end with .com, .in, or .edu";
-    return false;
+  if (email === "" || pass === "") {
+    document.getElementById("error").innerHTML = "Enter email and password";
+    return;
   }
 
   if (pass.length < 6) {
-    error.innerHTML = "Password must be at least 6 characters";
-    return false;
+    document.getElementById("error").innerHTML = "Password must be at least 6 characters";
+    return;
   }
 
-  alert("Registration Successful!");
-  return true;
+  // Save credentials locally
+  localStorage.setItem("email", email);
+  localStorage.setItem("password", pass);
+
+  alert("Account Created Successfully!");
 }
+
+// SIGN IN EXISTING USER
+function signIn() {
+  let email = document.getElementById("email").value.trim();
+  let pass = document.getElementById("pass").value;
+
+  let savedEmail = localStorage.getItem("email");
+  let savedPass = localStorage.getItem("password");
+
+  if (email === savedEmail && pass === savedPass) {
+    localStorage.setItem("loggedIn", "true");
+    alert("Login Successful!");
+    location.reload();
+  } else {
+    document.getElementById("error").innerHTML = "Incorrect Email or Password!";
+  }
+}
+
+// SIGN OUT USER
+function signOut() {
+  localStorage.setItem("loggedIn", "false");
+  alert("Signed Out!");
+  location.reload();
+}
+
 </script>
+
 </body>
 </html>
